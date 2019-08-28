@@ -8,11 +8,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class FavsFragment extends Fragment {
+public class FavsFragment extends Fragment implements IOnBackPressed {
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_favs, container, false);
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        ((MainActivity) getActivity()).goHome();
+        return true;
     }
 }

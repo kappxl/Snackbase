@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:id="@+id/mlv_linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/mlv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            android:gravity="left"
+            android:textColor="@color/mlv_Name"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="15dp"
+            android:textSize="18sp"/>
+        <TextView
+            android:id="@+id/mlv_cals"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(512 kcals)"
+            android:textColor="@color/mlv_details"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="5dp"
+            android:textSize="16sp"/>
+
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:layout_below="@+id/mlv_linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp">
+        <TextView
+            android:id="@+id/mlv_carbs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:textColor="@color/mlv_details"
+            android:text="carbs: 206"/>
+
+        <TextView
+            android:id="@+id/mlv_protein"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/mlv_details"
+            android:text="protein: 206"/>
+
+        <TextView
+            android:id="@+id/mlv_fat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
+            android:textColor="@color/mlv_details"
+            android:text="fat: 206"
+            />
+
+    </RelativeLayout>
+
+</RelativeLayout>

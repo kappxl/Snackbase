@@ -57,7 +57,7 @@ public class HomeFragment extends Fragment {
         btAddMeal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity) getActivity()).goFoodlist();
+                ((MainActivity) getActivity()).goFoodList();
             }
         });
 

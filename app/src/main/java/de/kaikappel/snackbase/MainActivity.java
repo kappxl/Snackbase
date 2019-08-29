@@ -62,6 +62,11 @@ public class MainActivity extends AppCompatActivity {
         bottomNav.setSelectedItemId(R.id.nav_home);
     }
 
+    public void goFoodList() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                new FoodFragment()).commit();
+    }
+
     public ArrayList<Food> getMeals() {
         ArrayList<Food> mealList;
         DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this);

@@ -6,13 +6,12 @@
         android:icon="@drawable/ic_home_black_24dp"
         android:title="home" />
     <item
-        android:id="@+id/nav_meals"
-        android:icon="@drawable/ic_format_list_bulleted_black_24dp"
-        android:title="meals" />
-    <item
         android:id="@+id/nav_favs"
         android:icon="@drawable/ic_favorite_black_24dp"
         android:title="favs" />
-
+    <item
+        android:id="@+id/nav_create"
+        android:icon="@drawable/ic_add_circle_black_24dp"
+        android:title="create" />
 
 </menu>

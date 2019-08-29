@@ -1,6 +1,7 @@
 package de.kaikappel.snackbase;
 
 public class Food {
+    private int id;
     private String name;
     private int cals;
     private float carbs;
@@ -8,8 +9,9 @@ public class Food {
     private float fat;
     private int grams;
 
-    public Food(String name, int cals, float carbs, float protein, float fat, int grams) {
+    public Food(String name, int id, int cals, float carbs, float protein, float fat, int grams) {
         this.name = name;
+        this.id = id;
         this.cals = cals;
         this.carbs = carbs;
         this.protein = protein;
@@ -19,6 +21,10 @@ public class Food {
 
     public String getName() {
         return name;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public int getCals() {

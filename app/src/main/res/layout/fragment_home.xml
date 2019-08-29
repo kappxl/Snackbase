@@ -9,6 +9,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/bgCreme"
         android:gravity="center">
 
         <LinearLayout
@@ -39,7 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:layout_margin="25dp"
+            android:layout_margin="20dp"
             android:layout_alignParentBottom="true">
             <LinearLayout
                 android:orientation="vertical"
@@ -108,11 +109,12 @@
 
     </LinearLayout>
 
+
     <LinearLayout
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
+        android:background="@drawable/rectangle_1px"
         android:weightSum="100">
 
 
@@ -121,6 +123,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Add Meal"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
             android:layout_weight="50"/>
 
     </LinearLayout>

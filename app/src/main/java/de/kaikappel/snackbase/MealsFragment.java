@@ -30,7 +30,7 @@ public class MealsFragment extends Fragment implements IOnBackPressed {
         setHasOptionsMenu(true);
         listView = view.findViewById(R.id.mealListView);
 
-        foodList = ((MainActivity) getActivity()).getMeals();
+        foodList = ((MainActivity) getActivity()).getMealList();
 
         adapter = new FoodListAdapter(getActivity().getApplicationContext(),
                 R.layout.food_list_layout, foodList);
@@ -39,9 +39,9 @@ public class MealsFragment extends Fragment implements IOnBackPressed {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // mealListener.onMealSent(foodList.get(position));
-                Toast.makeText(getActivity().getApplicationContext(), foodList.get(position).getName(), Toast.LENGTH_SHORT).show();
-                // Add to prefs
+                Toast.makeText(getActivity().getApplicationContext(), foodList.get(position).getName() + " added", Toast.LENGTH_SHORT).show();
+                ((MainActivity) getActivity()).appendMeal(foodList.get(position).getId());
+                ((MainActivity) getActivity()).goHome();
             }
         });
 

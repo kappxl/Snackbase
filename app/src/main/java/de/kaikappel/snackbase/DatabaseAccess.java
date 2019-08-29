@@ -37,9 +37,9 @@ public class DatabaseAccess {
         }
     }
 
-    public ArrayList<Food> getMeals() {
+    public ArrayList<Food> getMeals(String meals) {
         foodList = new ArrayList<>();
-        c = db.rawQuery("SELECT m.name, m.id as ID, " +
+        String query = "SELECT m.name, m.id as ID, " +
                 "SUM((CAST(i.cals AS FLOAT) / 100) * (i.grams * r.amount)) as cals, " +
                 "SUM((i.carbs / 100) * (i.grams * r.amount)) as carbs, " +
                 "SUM((i.protein / 100) * (i.grams * r.amount)) as protein, " +
@@ -48,16 +48,42 @@ public class DatabaseAccess {
                 "FROM recipes r " +
                 "JOIN ingredients i ON i.id = r.ingredient_id " +
                 "JOIN meals m ON m.id = r.food_id " +
-                "GROUP BY m.name, m.id", new String[]{});
+                "WHERE m.id IN (" + meals + ") " +
+                "GROUP BY m.name, m.id;";
+
+        c = db.rawQuery(query, new String[]{});
 
         //"WHERE m.breakfast = '1' " +
+        // Wichtig die Gaensefuesschen!!!
 
         while(c.moveToNext()) {
-            foodList.add(new Food(c.getString(0), c.getInt(2),
+            foodList.add(new Food(c.getString(0), c.getInt(1), c.getInt(2),
                     c.getFloat(3), c.getFloat(4),
                     c.getFloat(5), c.getInt(6)));
         }
 
+        return foodList;
+    }
+
+    public ArrayList<Food> getMeals() {
+        foodList = new ArrayList<>();
+        String query = "SELECT m.name, m.id as ID, " +
+                "SUM((CAST(i.cals AS FLOAT) / 100) * (i.grams * r.amount)) as cals, " +
+                "SUM((i.carbs / 100) * (i.grams * r.amount)) as carbs, " +
+                "SUM((i.protein / 100) * (i.grams * r.amount)) as protein, " +
+                "SUM((i.fat / 100) * (i.grams * r.amount)) as fat, " +
+                "SUM(i.grams * r.amount) as grams " +
+                "FROM recipes r " +
+                "JOIN ingredients i ON i.id = r.ingredient_id " +
+                "JOIN meals m ON m.id = r.food_id " +
+                "GROUP BY m.name, m.id;";
+
+        c = db.rawQuery(query, new String[]{});
+        while(c.moveToNext()) {
+            foodList.add(new Food(c.getString(0), c.getInt(1), c.getInt(2),
+                    c.getFloat(3), c.getFloat(4),
+                    c.getFloat(5), c.getInt(6)));
+        }
         return foodList;
     }
 

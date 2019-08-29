@@ -5,6 +5,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -22,10 +24,16 @@ public class HomeFragment extends Fragment {
     FoodListAdapter adapter;
     Button btAddMeal;
 
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        menu.clear();
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_home, container, false);
+        setHasOptionsMenu(true);
 
         cals = view.findViewById(R.id.tvCals);
         carbs = view.findViewById(R.id.tvCarbs);
@@ -33,23 +41,16 @@ public class HomeFragment extends Fragment {
         fat = view.findViewById(R.id.tvFat);
         listView = view.findViewById(R.id.listView);
         btAddMeal = view.findViewById(R.id.btAddMeal);
-        foodList = new ArrayList<>();
 
-        foodList.add(new Food("Fleisch", 500, (float) 15.55, (float) 80.1, 0, 100));
-        foodList.add(new Food("Fisch", 300, (float) 55.75, (float) 80.1, 0, 100));
-        foodList.add(new Food("Ananas", 200, (float) 0.55, (float) 20.61, (float) 18.44, 100));
 
-        adapter = new FoodListAdapter(getActivity().getApplicationContext(),
-                R.layout.food_list_layout, foodList);
-        listView.setAdapter(adapter);
+        refreshPage();
 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
-                foodList.remove(position);
-                adapter.notifyDataSetChanged();
-
+                ((MainActivity) getActivity()).popMeal(foodList.get(position).getId());
+                refreshPage();
                 return false;
             }
         });
@@ -62,14 +63,14 @@ public class HomeFragment extends Fragment {
         });
 
 
-        refresh();
-
         return view;
     }
 
-    private void refresh() {
+    private void refreshPage() {
         int icals = 0;
         float fcarbs = 0, fProtein = 0, fFat = 0;
+
+        foodList = ((MainActivity) getActivity()).getSelectedMealList();
 
         for(Food x: foodList) {
             icals += x.getCals();
@@ -81,5 +82,9 @@ public class HomeFragment extends Fragment {
         carbs.setText(String.format("%.0f", fcarbs));
         protein.setText(String.format("%.0f", fProtein));
         fat.setText(String.format("%.0f", fFat));
+
+        adapter = new FoodListAdapter(getActivity().getApplicationContext(),
+                R.layout.food_list_layout, foodList);
+        listView.setAdapter(adapter);
     }
 }

@@ -4,7 +4,10 @@
     <color name="colorPrimaryDark">#9E9E9E</color>
     <color name="colorMenuBackground">#EAEAEA</color>
     <color name="colorAccent">#000000</color>
+    <color name="bgCreme">#F2EFED</color>
+    <color name="bgCremeStroke">#D1CECC</color>
 
     <color name="mlv_Name">#000000</color>
     <color name="mlv_details">#7e7e7e</color>
+
 </resources>

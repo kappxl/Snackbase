@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -19,6 +20,7 @@ public class HomeFragment extends Fragment {
     TextView cals, carbs, protein, fat;
     ListView listView;
     FoodListAdapter adapter;
+    Button btAddMeal;
 
     @Nullable
     @Override
@@ -30,11 +32,12 @@ public class HomeFragment extends Fragment {
         protein = view.findViewById(R.id.tvProtein);
         fat = view.findViewById(R.id.tvFat);
         listView = view.findViewById(R.id.listView);
+        btAddMeal = view.findViewById(R.id.btAddMeal);
         foodList = new ArrayList<>();
 
-        foodList.add(new Food("Cockschelle", 500, (float) 15.55, (float) 80.1, 0, 100));
-        foodList.add(new Food("Sackhaare", 300, (float) 55.75, (float) 80.1, 0, 100));
-        foodList.add(new Food("Analkugeln", 200, (float) 0.55, (float) 20.61, (float) 18.44, 100));
+        foodList.add(new Food("Fleisch", 500, (float) 15.55, (float) 80.1, 0, 100));
+        foodList.add(new Food("Fisch", 300, (float) 55.75, (float) 80.1, 0, 100));
+        foodList.add(new Food("Ananas", 200, (float) 0.55, (float) 20.61, (float) 18.44, 100));
 
         adapter = new FoodListAdapter(getActivity().getApplicationContext(),
                 R.layout.food_list_layout, foodList);
@@ -48,6 +51,13 @@ public class HomeFragment extends Fragment {
                 adapter.notifyDataSetChanged();
 
                 return false;
+            }
+        });
+
+        btAddMeal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) getActivity()).goFoodlist();
             }
         });
 

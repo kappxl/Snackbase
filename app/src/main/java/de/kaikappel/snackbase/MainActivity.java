@@ -7,9 +7,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     BottomNavigationView bottomNav;
+    ArrayList<Food> mealList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,5 +61,16 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                 new HomeFragment()).commit();
         bottomNav.setSelectedItemId(R.id.nav_home);
+    }
+
+    public ArrayList<Food> getMeals() {
+        ArrayList<Food> mealList;
+        DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this);
+        databaseAccess.open();
+
+        mealList = databaseAccess.getMeals();
+
+        databaseAccess.close();
+        return mealList;
     }
 }

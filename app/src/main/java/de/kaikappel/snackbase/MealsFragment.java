@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class MealsFragment extends Fragment implements IOnBackPressed {
 
     ListView listView;
-    ArrayList<Food> foodList = null;
+    ArrayList<Food> foodList;
     FoodListAdapter adapter;
 
     @Nullable
@@ -29,12 +29,8 @@ public class MealsFragment extends Fragment implements IOnBackPressed {
         View view =  inflater.inflate(R.layout.fragment_meals, container, false);
         setHasOptionsMenu(true);
         listView = view.findViewById(R.id.mealListView);
-        DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
-        databaseAccess.open();
 
-        foodList = databaseAccess.getMeals();
-
-        databaseAccess.close();
+        foodList = ((MainActivity) getActivity()).getMeals();
 
         adapter = new FoodListAdapter(getActivity().getApplicationContext(),
                 R.layout.food_list_layout, foodList);
@@ -45,6 +41,7 @@ public class MealsFragment extends Fragment implements IOnBackPressed {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // mealListener.onMealSent(foodList.get(position));
                 Toast.makeText(getActivity().getApplicationContext(), foodList.get(position).getName(), Toast.LENGTH_SHORT).show();
+                // Add to prefs
             }
         });
 

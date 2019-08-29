@@ -12,7 +12,6 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     BottomNavigationView bottomNav;
-    ArrayList<Food> mealList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

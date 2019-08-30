@@ -6,7 +6,6 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -43,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
                             selectedFragment = new HomeFragment();
                             break;
                         case R.id.nav_create:
-                            selectedFragment = new MealsFragment();
+                            selectedFragment = new CreateFragment();
                             break;
                         case R.id.nav_favs:
                             selectedFragment = new FavsFragment();

@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
         String meals = prefs.getString("meals", "");
         String newMeals;
 
-        if (meals == ""){
+        if (meals.isEmpty()){
             newMeals = "'" + mealId + "'";
         } else {
             newMeals = meals + ", '" + mealId + "'";
@@ -119,8 +119,8 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         String meals = prefs.getString("meals", "");
-        meals = meals.replaceAll(", '" + id + "'", "");
         meals = meals.replaceAll("'" + id + "', ", "");
+        meals = meals.replaceAll(", '" + id + "'", "");
         meals = meals.replaceAll("'" + id + "'", "");
         editor.putString("meals", meals);
         editor.apply();

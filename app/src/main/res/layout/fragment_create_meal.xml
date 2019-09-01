@@ -124,6 +124,7 @@
         android:layout_below="@id/ll_3"
         android:layout_above="@id/ll_4">
         <ListView
+            android:id="@+id/lv_ingredientsCM"
             android:layout_width="match_parent"
             android:layout_height="match_parent"></ListView>
 

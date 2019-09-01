@@ -1,0 +1,24 @@
+CREATE TABLE "ingredients" (
+	"id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	"name"	TEXT NOT NULL,
+	"cals"	INTEGER NOT NULL,
+	"carbs"	NUMERIC NOT NULL,
+	"protein"	NUMERIC NOT NULL,
+	"fat"	NUMERIC NOT NULL,
+	"grams"	INTEGER NOT NULL
+);
+
+CREATE TABLE "meals" (
+	"id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	"name"	TEXT NOT NULL,
+	"breakfast"	INTEGER NOT NULL,
+	"lunch"	INTEGER NOT NULL,
+	"dinner"	INTEGER NOT NULL
+);
+
+CREATE TABLE "recipes" (
+	"meal_id"	INTEGER NOT NULL,
+	"ingredient_id"	INTEGER NOT NULL,
+	"amount"	NUMERIC NOT NULL,
+	PRIMARY KEY("meal_id","ingredient_id")
+);

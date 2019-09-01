@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -15,18 +16,23 @@ public class MainActivity extends AppCompatActivity {
 
     BottomNavigationView bottomNav;
     private static  final String SHARED_PREFS = "sharedPrefs";
-    ArrayList<Food> mealList;
-    ArrayList<Food> selectedMealList;
+    ArrayList<Meal> mealList;
+    ArrayList<Food> ingredientList;
+    ArrayList<Meal> selectedMealList;
+    ArrayList<Food> createMealList;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
+        //clearMeals();
         loadSelectedMeals();
         loadAllMeals();
+        loadAllIngredients();
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                 new HomeFragment()).commit();
@@ -41,11 +47,12 @@ public class MainActivity extends AppCompatActivity {
                         case R.id.nav_home:
                             selectedFragment = new HomeFragment();
                             break;
-                        case R.id.nav_create:
-                            selectedFragment = new CreateFragment();
-                            break;
                         case R.id.nav_favs:
                             selectedFragment = new FavsFragment();
+                            break;
+                        case R.id.nav_create:
+                            resetCreateMealList();
+                            selectedFragment = new CreateFragment();
                             break;
                     }
 
@@ -63,6 +70,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void goCreate() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                new CreateFragment()).commit();
+    }
+
     public void goHome() {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                 new HomeFragment()).commit();
@@ -74,8 +86,14 @@ public class MainActivity extends AppCompatActivity {
                 new FoodFragment()).commit();
     }
 
-    public ArrayList<Food> getMealList() { return mealList; }
-    public ArrayList<Food> getSelectedMealList() { return selectedMealList; }
+    public void goIngredients() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                new IngredientsFragment()).commit();
+    }
+
+    public ArrayList<Meal> getMealList() { return mealList; }
+    public ArrayList<Food> getIngredientList() { return ingredientList; }
+    public ArrayList<Meal> getSelectedMealList() { return selectedMealList; }
 
     public void loadSelectedMeals() {
         SharedPreferences prefs = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
@@ -98,10 +116,23 @@ public class MainActivity extends AppCompatActivity {
         databaseAccess.close();
     }
 
+    public void loadAllIngredients() {
+        DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this);
+        databaseAccess.open();
+
+        ingredientList = databaseAccess.getIngredients();
+
+        databaseAccess.close();
+    }
+
     public void appendMeal(int mealId) {
         SharedPreferences prefs = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         String meals = prefs.getString("meals", "");
+        if (meals.contains("'" + mealId + "'")) {
+            Toast.makeText(this, "already added", Toast.LENGTH_SHORT).show();
+            return;
+        }
         String newMeals;
 
         if (meals.isEmpty()){
@@ -138,5 +169,21 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         String meals = prefs.getString("meals", "");
         Toast.makeText(this, meals, Toast.LENGTH_SHORT).show();
+    }
+
+    public void addCreateMeal(Food food) {
+        createMealList.add(food);
+    }
+
+    public void popCreateMeal(int i) {
+        createMealList.remove(i);
+    }
+
+    public ArrayList<Food> getCreateMealList() {
+        return createMealList;
+    }
+
+    public void resetCreateMealList() {
+        createMealList = new ArrayList<>();
     }
 }

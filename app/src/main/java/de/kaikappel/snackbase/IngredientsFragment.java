@@ -16,33 +16,32 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Map;
 
-public class MealsFragment extends Fragment implements IOnBackPressed {
+public class IngredientsFragment extends Fragment implements IOnBackPressed {
 
     ListView listView;
-    ArrayList<Meal> mealList;
-    MealListAdapter adapter;
+    ArrayList<Food> foodList;
+    FoodListAdapter adapter;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragment_meals, container, false);
+        View view =  inflater.inflate(R.layout.fragment_ingredients, container, false);
         setHasOptionsMenu(true);
-        listView = view.findViewById(R.id.mealListView);
+        listView = view.findViewById(R.id.ingredientListView);
 
-        mealList = ((MainActivity) getActivity()).getMealList();
+        foodList = ((MainActivity) getActivity()).getIngredientList();
 
-        adapter = new MealListAdapter(getActivity().getApplicationContext(),
-                R.layout.food_list_layout, mealList);
+        adapter = new FoodListAdapter(getActivity().getApplicationContext(),
+                R.layout.food_list_layout, foodList);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ((MainActivity) getActivity()).appendMeal(mealList.get(position).getId());
-                ((MainActivity) getActivity()).showMeals();
-                ((MainActivity) getActivity()).goHome();
-                //Toast.makeText(getActivity().getApplicationContext(), foodList.get(position).getName() + " added", Toast.LENGTH_SHORT).show();
+                ((MainActivity) getActivity()).addCreateMeal(foodList.get(position));
+                ((MainActivity) getActivity()).goCreate();
             }
         });
 
@@ -67,14 +66,14 @@ public class MealsFragment extends Fragment implements IOnBackPressed {
             @Override
             public boolean onQueryTextChange(String newText) {
 
-                ArrayList<Meal> filteredFoods = new ArrayList<>();
+                ArrayList<Food> filteredFoods = new ArrayList<>();
 
-                for(Meal x: mealList) {
+                for(Food x: foodList) {
                     if (x.getName().toLowerCase().contains(newText.toLowerCase())) {
                         filteredFoods.add(x);
                     }
                 }
-                adapter = new MealListAdapter(getActivity().getApplicationContext(),
+                adapter = new FoodListAdapter(getActivity().getApplicationContext(),
                         R.layout.food_list_layout, filteredFoods);
                 listView.setAdapter(adapter);
                 return false;
@@ -86,7 +85,7 @@ public class MealsFragment extends Fragment implements IOnBackPressed {
 
     @Override
     public boolean onBackPressed() {
-        ((MainActivity) getActivity()).goHome();
+        ((MainActivity) getActivity()).goCreate();
         return true;
     }
 }

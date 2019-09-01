@@ -18,10 +18,10 @@ import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
 
-    ArrayList<Food> foodList;
+    ArrayList<Meal> mealList;
     TextView cals, carbs, protein, fat;
     ListView listView;
-    FoodListAdapter adapter;
+    MealListAdapter adapter;
     Button btAddMeal;
 
     @Override
@@ -49,7 +49,7 @@ public class HomeFragment extends Fragment {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
-                ((MainActivity) getActivity()).popMeal(foodList.get(position).getId());
+                ((MainActivity) getActivity()).popMeal(mealList.get(position).getId());
                 refreshPage();
                 return false;
             }
@@ -70,9 +70,9 @@ public class HomeFragment extends Fragment {
         int icals = 0;
         float fcarbs = 0, fProtein = 0, fFat = 0;
 
-        foodList = ((MainActivity) getActivity()).getSelectedMealList();
+        mealList = ((MainActivity) getActivity()).getSelectedMealList();
 
-        for(Food x: foodList) {
+        for(Meal x: mealList) {
             icals += x.getCals();
             fcarbs += x.getCarbs();
             fProtein += x.getProtein();
@@ -83,8 +83,8 @@ public class HomeFragment extends Fragment {
         protein.setText(String.format("%.0f", fProtein));
         fat.setText(String.format("%.0f", fFat));
 
-        adapter = new FoodListAdapter(getActivity().getApplicationContext(),
-                R.layout.food_list_layout, foodList);
+        adapter = new MealListAdapter(getActivity().getApplicationContext(),
+                R.layout.food_list_layout, mealList);
         listView.setAdapter(adapter);
     }
 }

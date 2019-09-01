@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
                             selectedFragment = new FavsFragment();
                             break;
                         case R.id.nav_create:
+                            resetCreateMealList();
                             selectedFragment = new CreateFragment();
                             break;
                     }
@@ -108,6 +109,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // HANDLE FOOD LISTS
+
+    public void resetCreateMealList() {
+        cmIngredients = new ArrayList<>();
+    }
 
     public void appendMeal(int mealId) {
         SharedPreferences prefs = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
@@ -163,12 +168,6 @@ public class MainActivity extends AppCompatActivity {
     public ArrayList<Food> getCmIngredients() {
         return cmIngredients;
     }*/
-
-/*
-    public void resetCreateMealList() {
-        cmIngredients = new ArrayList<>();
-    }
-*/
 
     // NAVIGATION
 

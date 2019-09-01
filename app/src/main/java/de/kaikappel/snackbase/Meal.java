@@ -33,7 +33,6 @@ public class Meal {
             this.carbs += i.getCarbsAbs();
             this.protein += i.getProteinAbs();
             this.fat += i.getFatAbs();
-            this.cals += i.getCalsAbs();
             this.grams += i.getGramsAbs();
         }
     }

@@ -12,8 +12,8 @@ public class DatabaseAccess {
     private SQLiteOpenHelper openHelper;
     private SQLiteDatabase db;
     private static DatabaseAccess instance;
-    ArrayList<Food> foodList;
     ArrayList<Meal> mealList;
+    ArrayList<Ingredient> ingredientList;
 
     private DatabaseAccess(Context context) {
         this.openHelper = new DatabaseOpenHelper(context);
@@ -113,39 +113,22 @@ public class DatabaseAccess {
     }
 
     public ArrayList<Ingredient> getAllIngredients() {
-        ArrayList<Ingredient> ingredientList = new ArrayList<>();
+        ingredientList = new ArrayList<>();
 
         Cursor getIngredients = db.rawQuery("SELECT * FROM ingredients;", new String[]{});
         while(getIngredients.moveToNext()) {
-
+            int fGrams = getIngredients.getInt(6);
             ingredientList.add(new Ingredient(getIngredients.getInt(0),
                     getIngredients.getString(1),
                     getIngredients.getInt(2),
                     getIngredients.getFloat(3),
                     getIngredients.getFloat(4),
                     getIngredients.getFloat(5),
-                    getIngredients.getInt(6),
-                    -1));
-
-/*            foodList.add(new Food(getIngredients.getString(1),
-                    getIngredients.getInt(0),
-                    (int)(iCals / (float) 100 * (float) iGrams),
-                    fCarbs / (float) 100 * (float) iGrams,
-                    fProtein / (float) 100 * (float) iGrams,
-                    fFat / (float) 100 * (float) iGrams,
-                    iGrams));*/
+                    fGrams,
+                    (float) fGrams / (float) 100));
         }
         getIngredients.close();
         return ingredientList;
-    }
-
-    public void createIngredient(String name, int iCals, float fCarbs, float fProtein, float fFat, int iGrams) {
-        String query = "INSERT INTO ingredient (name, cals, carbs, protein, fat, grams) " +
-                "VALUES ('"+name+"', '"+iCals+"', '"+fCarbs+"', '"+fProtein+"', '"+fFat+"', '"+iGrams+"');";
-        Cursor insertIngredient = db.rawQuery(query, new String[]{});
-        if (insertIngredient.moveToFirst()){
-            Log.e("Create Ingredient", "Result of insertion is not empty.");
-        }
     }
 
 /*    public void createMeal(Meal meal) {

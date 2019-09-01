@@ -21,8 +21,8 @@ import java.util.Map;
 public class IngredientsFragment extends Fragment implements IOnBackPressed {
 
     ListView listView;
-    ArrayList<Food> foodList;
-    FoodListAdapter adapter;
+    ArrayList<Ingredient> ingredientList;
+    IngredientListAdapter adapter;
 
     @Nullable
     @Override
@@ -31,16 +31,16 @@ public class IngredientsFragment extends Fragment implements IOnBackPressed {
         setHasOptionsMenu(true);
         listView = view.findViewById(R.id.ingredientListView);
 
-        foodList = ((MainActivity) getActivity()).getIngredientList();
+        ingredientList = ((MainActivity) getActivity()).getIngredientList();
 
-        adapter = new FoodListAdapter(getActivity().getApplicationContext(),
-                R.layout.food_list_layout, foodList);
+        adapter = new IngredientListAdapter(getActivity().getApplicationContext(),
+                R.layout.food_list_layout, ingredientList);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ((MainActivity) getActivity()).addCreateMeal(foodList.get(position));
+                //((MainActivity) getActivity()).addCreateMeal(ingredientList.get(position));
                 ((MainActivity) getActivity()).goCreate();
             }
         });
@@ -66,14 +66,14 @@ public class IngredientsFragment extends Fragment implements IOnBackPressed {
             @Override
             public boolean onQueryTextChange(String newText) {
 
-                ArrayList<Food> filteredFoods = new ArrayList<>();
+                ArrayList<Ingredient> filteredFoods = new ArrayList<>();
 
-                for(Food x: foodList) {
+                for(Ingredient x: ingredientList) {
                     if (x.getName().toLowerCase().contains(newText.toLowerCase())) {
                         filteredFoods.add(x);
                     }
                 }
-                adapter = new FoodListAdapter(getActivity().getApplicationContext(),
+                adapter = new IngredientListAdapter(getActivity().getApplicationContext(),
                         R.layout.food_list_layout, filteredFoods);
                 listView.setAdapter(adapter);
                 return false;

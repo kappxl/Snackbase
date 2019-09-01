@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -18,7 +17,7 @@ import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
 
-    ArrayList<Meal> mealList;
+    ArrayList<Meal> selectedMealList;
     TextView cals, carbs, protein, fat;
     ListView listView;
     MealListAdapter adapter;
@@ -35,6 +34,8 @@ public class HomeFragment extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_home, container, false);
         setHasOptionsMenu(true);
 
+        // VARIABLES
+
         cals = view.findViewById(R.id.tvCals);
         carbs = view.findViewById(R.id.tvCarbs);
         protein = view.findViewById(R.id.tvProtein);
@@ -42,14 +43,17 @@ public class HomeFragment extends Fragment {
         listView = view.findViewById(R.id.listView);
         btAddMeal = view.findViewById(R.id.btAddMeal);
 
+        // CREATE VIEW
 
         refreshPage();
+
+        // LISTENER
 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
-                ((MainActivity) getActivity()).popMeal(mealList.get(position).getId());
+                ((MainActivity) getActivity()).popSelectedMeal(selectedMealList.get(position).getId());
                 refreshPage();
                 return false;
             }
@@ -70,9 +74,9 @@ public class HomeFragment extends Fragment {
         int icals = 0;
         float fcarbs = 0, fProtein = 0, fFat = 0;
 
-        mealList = ((MainActivity) getActivity()).getSelectedMealList();
+        selectedMealList = ((MainActivity) getActivity()).getSelectedMealList();
 
-        for(Meal x: mealList) {
+        for(Meal x: selectedMealList) {
             icals += x.getCals();
             fcarbs += x.getCarbs();
             fProtein += x.getProtein();
@@ -84,7 +88,7 @@ public class HomeFragment extends Fragment {
         fat.setText(String.format("%.0f", fFat));
 
         adapter = new MealListAdapter(getActivity().getApplicationContext(),
-                R.layout.food_list_layout, mealList);
+                R.layout.food_list_layout, selectedMealList);
         listView.setAdapter(adapter);
     }
 }

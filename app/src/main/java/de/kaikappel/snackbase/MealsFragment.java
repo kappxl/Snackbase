@@ -28,21 +28,32 @@ public class MealsFragment extends Fragment implements IOnBackPressed {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_meals, container, false);
         setHasOptionsMenu(true);
+
+        // VARIABLES
+
         listView = view.findViewById(R.id.mealListView);
 
-        mealList = ((MainActivity) getActivity()).getMealList();
+        // CREATE VIEW
 
-        adapter = new MealListAdapter(getActivity().getApplicationContext(),
-                R.layout.food_list_layout, mealList);
-        listView.setAdapter(adapter);
+        loadListView();
+
+        // LISTENER
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ((MainActivity) getActivity()).appendMeal(mealList.get(position).getId());
-                ((MainActivity) getActivity()).showMeals();
                 ((MainActivity) getActivity()).goHome();
-                //Toast.makeText(getActivity().getApplicationContext(), foodList.get(position).getName() + " added", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+                // Expand and show ingredients from Meal
+
+                return false;
             }
         });
 
@@ -88,5 +99,15 @@ public class MealsFragment extends Fragment implements IOnBackPressed {
     public boolean onBackPressed() {
         ((MainActivity) getActivity()).goHome();
         return true;
+    }
+
+    // CREATE VIEW
+
+    public void loadListView() {
+        mealList = ((MainActivity) getActivity()).getFullMealList();
+
+        adapter = new MealListAdapter(getActivity().getApplicationContext(),
+                R.layout.food_list_layout, mealList);
+        listView.setAdapter(adapter);
     }
 }

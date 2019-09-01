@@ -21,12 +21,12 @@ import java.util.Map;
 public class CreateMealFragment extends Fragment implements IOnBackPressed {
 
     Button btSave, btAdd;
-    ArrayList<Food> ingredientList;
+    ArrayList<Ingredient> ingredientList;
     Meal meal;
     EditText etName;
     Switch b, l, d;
     ListView listView;
-    FoodListAdapter adapter;
+    IngredientListAdapter adapter;
 
     @Nullable
     @Override
@@ -67,7 +67,7 @@ public class CreateMealFragment extends Fragment implements IOnBackPressed {
                     Toast.makeText(getActivity().getApplicationContext(), "ingredients missing", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                meal = new Meal(name,
+/*                meal = new Meal(name,
                         (b.isChecked() ? 1 : 0),
                         (l.isChecked() ? 1 : 0),
                         (d.isChecked() ? 1 : 0));
@@ -78,12 +78,11 @@ public class CreateMealFragment extends Fragment implements IOnBackPressed {
 
                 DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
                 databaseAccess.open();
-
                 databaseAccess.createMeal(meal);
-
                 databaseAccess.close();
+
                 ((MainActivity) getActivity()).loadAllMeals();
-                ((MainActivity) getActivity()).resetCreateMealList();
+                ((MainActivity) getActivity()).resetCreateMealList();*/
                 ((MainActivity) getActivity()).goHome();
             }
         });
@@ -91,7 +90,7 @@ public class CreateMealFragment extends Fragment implements IOnBackPressed {
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                ((MainActivity) getActivity()).popCreateMeal(position);
+                ((MainActivity) getActivity()).popSelectedMealInCreateMeal(position);
                 loadItems();
 
                 return false;
@@ -107,8 +106,8 @@ public class CreateMealFragment extends Fragment implements IOnBackPressed {
     }
 
     public void loadItems() {
-        ingredientList = ((MainActivity) getActivity()).getCreateMealList();
-        adapter = new FoodListAdapter(getActivity().getApplicationContext(),
+        ingredientList = ((MainActivity) getActivity()).getCreateMealIngredientList();
+        adapter = new IngredientListAdapter(getActivity().getApplicationContext(),
                 R.layout.food_list_layout, ingredientList);
         listView.setAdapter(adapter);
     }

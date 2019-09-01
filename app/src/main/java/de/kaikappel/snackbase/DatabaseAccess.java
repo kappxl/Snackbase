@@ -5,10 +5,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 public class DatabaseAccess {
     private SQLiteOpenHelper openHelper;
@@ -39,34 +37,35 @@ public class DatabaseAccess {
         }
     }
 
-    public ArrayList<Meal> getMeals(String meals) {
+    // LOAD FROM DATABASE
+
+    public ArrayList<Meal> getAllMeals() {
+
         mealList = new ArrayList<>();
         String query = "SELECT * " +
-                "FROM meals m " +
-                "WHERE m.id IN (" + meals + ");";
+                "FROM meals m ORDER BY name;";
+        Cursor cMeals = db.rawQuery(query, new String[]{});
 
-        Cursor selectedMeals = db.rawQuery(query, new String[]{});
+        while(cMeals.moveToNext()) {
+            int meal_id = cMeals.getInt(0); // id
+            Meal meal = new Meal(meal_id,
+                    cMeals.getString(1),    // name
+                    cMeals.getInt(2),       // breakfast
+                    cMeals.getInt(3),       // lunch
+                    cMeals.getInt(4));      // dinner
 
-        //"WHERE m.breakfast = '1' " +
-        // Wichtig die Gaensefuesschen!!!
+            ArrayList<Ingredient> i = getIngredientsFromMeal(meal_id);
+            meal.addAllIngredients(i);
 
-        while(selectedMeals.moveToNext()) {
-            Meal meal = new Meal(selectedMeals.getInt(0),
-                    selectedMeals.getString(1),
-                    selectedMeals.getInt(2),
-                    selectedMeals.getInt(3),
-                    selectedMeals.getInt(4));
-            ArrayList<Food> recipe = getRecipe(selectedMeals.getInt(0));
-
-            meal.addAllIngredients(recipe);
             mealList.add(meal);
         }
+        cMeals.close();
 
         return mealList;
     }
 
-    public ArrayList<Food> getRecipe(int id) {
-        ArrayList<Food> recipeList = new ArrayList<>();
+    public ArrayList<Ingredient> getIngredientsFromMeal(int id) {
+        ArrayList<Ingredient> recipeList = new ArrayList<>();
         String query = "SELECT i.*, r.amount FROM recipes r " +
                 "JOIN ingredients i ON i.id = r.ingredient_id " +
                 "WHERE meal_id = '" + id + "';";
@@ -74,63 +73,70 @@ public class DatabaseAccess {
         Cursor cRecipe = db.rawQuery(query, new String[]{});
 
         while(cRecipe.moveToNext()) {
-            recipeList.add(new Food(cRecipe.getString(1),
-                    cRecipe.getInt(0),
-                    cRecipe.getInt(2),
-                    cRecipe.getFloat(3),
-                    cRecipe.getFloat(4),
-                    cRecipe.getFloat(5),
-                    cRecipe.getInt(6),
-                    cRecipe.getFloat(7)));
+            recipeList.add(new Ingredient(
+                    cRecipe.getInt(0),      // id
+                    cRecipe.getString(1),   // name
+                    cRecipe.getInt(2),      // cals
+                    cRecipe.getFloat(3),    // carbs
+                    cRecipe.getFloat(4),    // protein
+                    cRecipe.getFloat(5),    // fat
+                    cRecipe.getInt(6),      // grams
+                    cRecipe.getFloat(7)));  // amount
         }
+        cRecipe.close();
         return recipeList;
     }
 
-    public ArrayList<Meal> getMeals() {
-        db.execSQL("DELETE FROM meals WHERE id > '13';", new String[]{});
-        db.execSQL("DELETE FROM recipes WHERE meal_id > '13';", new String[]{});
+    public ArrayList<Meal> getSelectedMeals(String meals) {
         mealList = new ArrayList<>();
         String query = "SELECT * " +
-                "FROM meals m ORDER BY name;";
-        Cursor cMeals = db.rawQuery(query, new String[]{});
+                "FROM meals " +
+                "WHERE id IN (" + meals + ");";
 
-        while(cMeals.moveToNext()) {
-            int meal_id = cMeals.getInt(0);
-            Meal meal = new Meal(meal_id,
-                    cMeals.getString(1),
-                    cMeals.getInt(2),
-                    cMeals.getInt(3),
-                    cMeals.getInt(4));
-            ArrayList<Food> recipe = getRecipe(meal_id);
-            for(Food x: recipe) {
-                meal.addIngredient(x);
-            }
+        Cursor selectedMeals = db.rawQuery(query, new String[]{});
 
+        while(selectedMeals.moveToNext()) {
+            Meal meal = new Meal(selectedMeals.getInt(0),
+                    selectedMeals.getString(1),
+                    selectedMeals.getInt(2),
+                    selectedMeals.getInt(3),
+                    selectedMeals.getInt(4));
+            ArrayList<Ingredient> recipe = getIngredientsFromMeal(selectedMeals.getInt(0));
+
+            meal.addAllIngredients(recipe);
             mealList.add(meal);
         }
+
+        selectedMeals.close();
 
         return mealList;
     }
 
-    public ArrayList<Food> getIngredients() {
-        foodList = new ArrayList<>();
+    public ArrayList<Ingredient> getAllIngredients() {
+        ArrayList<Ingredient> ingredientList = new ArrayList<>();
 
         Cursor getIngredients = db.rawQuery("SELECT * FROM ingredients;", new String[]{});
         while(getIngredients.moveToNext()) {
-            int iCals = getIngredients.getInt(2);
-            float fCarbs = getIngredients.getFloat(3);
-            float fProtein = getIngredients.getFloat(4);
-            float fFat = getIngredients.getFloat(5);
-            int iGrams = getIngredients.getInt(6);
-            foodList.add(new Food(getIngredients.getString(1),
+
+            ingredientList.add(new Ingredient(getIngredients.getInt(0),
+                    getIngredients.getString(1),
+                    getIngredients.getInt(2),
+                    getIngredients.getFloat(3),
+                    getIngredients.getFloat(4),
+                    getIngredients.getFloat(5),
+                    getIngredients.getInt(6),
+                    -1));
+
+/*            foodList.add(new Food(getIngredients.getString(1),
                     getIngredients.getInt(0),
                     (int)(iCals / (float) 100 * (float) iGrams),
                     fCarbs / (float) 100 * (float) iGrams,
                     fProtein / (float) 100 * (float) iGrams,
                     fFat / (float) 100 * (float) iGrams,
-                    iGrams));
+                    iGrams));*/
         }
-        return foodList;
+        getIngredients.close();
+        return ingredientList;
     }
 
     public void createIngredient(String name, int iCals, float fCarbs, float fProtein, float fFat, int iGrams) {
@@ -142,20 +148,38 @@ public class DatabaseAccess {
         }
     }
 
-    public void createMeal(Meal meal) {
+/*    public void createMeal(Meal meal) {
+        db.execSQL("DELETE FROM meals WHERE id > 13;");
+        db.execSQL("DELETE FROM recipes WHERE meal_id > 13;");
+
+        ContentValues mealValues = new ContentValues();
+        mealValues.put("name", meal.getName());
+        mealValues.put("breakfast", meal.getBreakfast());
+        mealValues.put("lunch", meal.getLunch());
+        mealValues.put("dinner", meal.getLunch());
+
+        try {
+            db.beginTransaction();
+            db.insert("meals", null, mealValues);
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+
         Cursor cIdx = db.rawQuery("SELECT max(id) FROM meals;", new String[]{});
         cIdx.moveToFirst();
-        int food_id = cIdx.getInt(0) + 1;
+        int meal_id = cIdx.getInt(0);
+        meal.setId(meal_id);
+        String query = "INSERT INTO meals (name, breakfast, lunch, dinner) " +
+                "VALUES ('"+meal.getName()+"', '"+meal.getBreakfast()+"', '"+meal.getLunch()+"', '"+meal.getDinner()+"');";
+        db.execSQL(query);
 
-        String query = "INSERT INTO meals (id, name, breakfast, lunch, dinner) " +
-                "VALUES ('" + food_id + "', '"+meal.getName()+"', '"+meal.breakfast+"', '"+meal.lunch+"', '"+meal.dinner+"');";
-        db.execSQL(query, new String[]{});
 
 
         for(Food x: meal.getIngredients()) {
             query = "INSERT INTO recipes (meal_id, ingredient_id, amount) " +
-                    "VALUES ('"+ food_id +"', '"+x.getId()+"', '"+x.getAmount()+"');";
-            db.execSQL(query, new String[]{});
+                    "VALUES ('"+ meal.getId() +"', '"+x.getId()+"', '"+x.getAmount()+"');";
+            db.execSQL(query);
         }
-    }
+    }*/
 }

@@ -16,10 +16,10 @@ public class MainActivity extends AppCompatActivity {
 
     BottomNavigationView bottomNav;
     private static  final String SHARED_PREFS = "sharedPrefs";
-    ArrayList<Meal> mealList;
-    ArrayList<Food> ingredientList;
+    ArrayList<Meal> fullMealList;
     ArrayList<Meal> selectedMealList;
-    ArrayList<Food> createMealList;
+    ArrayList<Ingredient> ingredientList;
+    ArrayList<Ingredient> cmIngredients;
 
 
     @Override
@@ -27,16 +27,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
+        // VARIABLES
+
         bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
-        //clearMeals();
-        loadSelectedMeals();
-        loadAllMeals();
-        loadAllIngredients();
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                new HomeFragment()).commit();
+        // LOAD LISTS
+
+        loadAllMeals();
+        loadSelectedMeals();
+        loadAllIngredients();
+        //clearMeals();
+
+        // CREATE VIEW
+
+        goHome();
     }
+
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
@@ -51,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
                             selectedFragment = new FavsFragment();
                             break;
                         case R.id.nav_create:
-                            resetCreateMealList();
                             selectedFragment = new CreateFragment();
                             break;
                     }
@@ -70,30 +77,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void goCreate() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                new CreateFragment()).commit();
-    }
+    // LOAD FROM DATABASE
 
-    public void goHome() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                new HomeFragment()).commit();
-        bottomNav.setSelectedItemId(R.id.nav_home);
+    public void loadAllMeals() {
+        DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this);
+        databaseAccess.open();
+        fullMealList = databaseAccess.getAllMeals();
+        databaseAccess.close();
     }
-
-    public void goFoodList() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                new FoodFragment()).commit();
-    }
-
-    public void goIngredients() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                new IngredientsFragment()).commit();
-    }
-
-    public ArrayList<Meal> getMealList() { return mealList; }
-    public ArrayList<Food> getIngredientList() { return ingredientList; }
-    public ArrayList<Meal> getSelectedMealList() { return selectedMealList; }
 
     public void loadSelectedMeals() {
         SharedPreferences prefs = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
@@ -102,16 +93,7 @@ public class MainActivity extends AppCompatActivity {
         DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this);
         databaseAccess.open();
 
-        selectedMealList = databaseAccess.getMeals(meals);
-
-        databaseAccess.close();
-    }
-
-    public void loadAllMeals() {
-        DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this);
-        databaseAccess.open();
-
-        mealList = databaseAccess.getMeals();
+        selectedMealList = databaseAccess.getSelectedMeals(meals);
 
         databaseAccess.close();
     }
@@ -120,10 +102,12 @@ public class MainActivity extends AppCompatActivity {
         DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this);
         databaseAccess.open();
 
-        ingredientList = databaseAccess.getIngredients();
+        ingredientList = databaseAccess.getAllIngredients();
 
         databaseAccess.close();
     }
+
+    // HANDLE FOOD LISTS
 
     public void appendMeal(int mealId) {
         SharedPreferences prefs = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
@@ -145,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
         loadSelectedMeals();
     }
 
-    public void popMeal(int id) {
+    public void popSelectedMeal(int id) {
         SharedPreferences prefs = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         String meals = prefs.getString("meals", "");
@@ -157,6 +141,59 @@ public class MainActivity extends AppCompatActivity {
         loadSelectedMeals();
     }
 
+    public void popSelectedMealInCreateMeal(int i) {
+            cmIngredients.remove(i);
+        }
+
+    // GETTER OF LISTS
+
+    public ArrayList<Meal> getFullMealList() { return fullMealList; }
+    public ArrayList<Meal> getSelectedMealList() { return selectedMealList; }
+    public ArrayList<Ingredient> getIngredientList() { return ingredientList; }
+    public ArrayList<Ingredient> getCreateMealIngredientList() { return cmIngredients; }
+
+/*    public ArrayList<Food> getIngredientList() { return ingredientList; }
+    */
+
+
+/*    public void addCreateMeal(Food food) {
+        cmIngredients.add(food);
+    }
+
+    public ArrayList<Food> getCmIngredients() {
+        return cmIngredients;
+    }*/
+
+/*
+    public void resetCreateMealList() {
+        cmIngredients = new ArrayList<>();
+    }
+*/
+
+    // NAVIGATION
+
+    public void goCreate() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                new CreateFragment()).commit();
+    }
+
+    public void goHome() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                new HomeFragment()).commit();
+    }
+
+    public void goFoodList() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                new FoodFragment()).commit();
+    }
+
+    public void goIngredients() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                new IngredientsFragment()).commit();
+    }
+
+    // DEBUGGING ONLY
+
     public void clearMeals() {
         SharedPreferences prefs = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
@@ -164,26 +201,9 @@ public class MainActivity extends AppCompatActivity {
         editor.apply();
     }
 
-
     public void showMeals() {
         SharedPreferences prefs = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         String meals = prefs.getString("meals", "");
         Toast.makeText(this, meals, Toast.LENGTH_SHORT).show();
-    }
-
-    public void addCreateMeal(Food food) {
-        createMealList.add(food);
-    }
-
-    public void popCreateMeal(int i) {
-        createMealList.remove(i);
-    }
-
-    public ArrayList<Food> getCreateMealList() {
-        return createMealList;
-    }
-
-    public void resetCreateMealList() {
-        createMealList = new ArrayList<>();
     }
 }

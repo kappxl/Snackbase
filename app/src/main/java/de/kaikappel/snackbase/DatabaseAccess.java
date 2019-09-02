@@ -116,7 +116,7 @@ public class DatabaseAccess {
     public ArrayList<Ingredient> getAllIngredients() {
         ingredientList = new ArrayList<>();
 
-        Cursor getIngredients = db.rawQuery("SELECT * FROM ingredients;", new String[]{});
+        Cursor getIngredients = db.rawQuery("SELECT * FROM ingredients ORDER BY name;", new String[]{});
         while(getIngredients.moveToNext()) {
             float fGrams = getIngredients.getFloat(6);
             ingredientList.add(new Ingredient(getIngredients.getInt(0),
@@ -176,6 +176,26 @@ public class DatabaseAccess {
                     "'" + 1 + "')";
 
             db.execSQL(insertIngredient);
+        }
+
+        return true;
+    }
+
+    public boolean insertIngredient(String name, float cals, float carbs, float protein, float fat, float grams) {
+
+        String insertIngredient = "INSERT INTO ingredients (name, cals, carbs, protein, fat, grams) VALUES (" +
+                "'" + name + "', " +
+                "'" + cals + "', " +
+                "'" + carbs + "', " +
+                "'" + protein + "', " +
+                "'" + fat + "', " +
+                "'" + grams + "')";
+        try {
+
+            db.execSQL(insertIngredient);
+
+        } catch (Exception e) {
+            return false;
         }
 
         return true;

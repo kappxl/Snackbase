@@ -88,9 +88,11 @@ public class CreateMealFragment extends Fragment implements IOnBackPressed {
 
                 DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
                 databaseAccess.open();
+
                 if (!databaseAccess.insertMeal(meal)) {
                     Toast.makeText(getActivity().getApplicationContext(), R.string.error_msg_default, Toast.LENGTH_SHORT).show();
                 }
+
                 databaseAccess.close();
 
 

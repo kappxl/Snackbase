@@ -73,14 +73,15 @@ public class DatabaseAccess {
         Cursor cRecipe = db.rawQuery(query, new String[]{});
 
         while(cRecipe.moveToNext()) {
+            float grams = cRecipe.getFloat(6);
             recipeList.add(new Ingredient(
                     cRecipe.getInt(0),      // id
                     cRecipe.getString(1),   // name
-                    cRecipe.getInt(2),      // cals
+                    cRecipe.getFloat(2),    // cals
                     cRecipe.getFloat(3),    // carbs
                     cRecipe.getFloat(4),    // protein
                     cRecipe.getFloat(5),    // fat
-                    cRecipe.getInt(6),      // grams
+                    grams,                              // grams
                     cRecipe.getFloat(7)));  // amount
         }
         cRecipe.close();
@@ -117,52 +118,17 @@ public class DatabaseAccess {
 
         Cursor getIngredients = db.rawQuery("SELECT * FROM ingredients;", new String[]{});
         while(getIngredients.moveToNext()) {
-            int fGrams = getIngredients.getInt(6);
+            float fGrams = getIngredients.getFloat(6);
             ingredientList.add(new Ingredient(getIngredients.getInt(0),
                     getIngredients.getString(1),
-                    getIngredients.getInt(2),
+                    getIngredients.getFloat(2),
                     getIngredients.getFloat(3),
                     getIngredients.getFloat(4),
                     getIngredients.getFloat(5),
                     fGrams,
-                    (float) fGrams / (float) 100));
+                    1));
         }
         getIngredients.close();
         return ingredientList;
     }
-
-/*    public void createMeal(Meal meal) {
-        db.execSQL("DELETE FROM meals WHERE id > 13;");
-        db.execSQL("DELETE FROM recipes WHERE meal_id > 13;");
-
-        ContentValues mealValues = new ContentValues();
-        mealValues.put("name", meal.getName());
-        mealValues.put("breakfast", meal.getBreakfast());
-        mealValues.put("lunch", meal.getLunch());
-        mealValues.put("dinner", meal.getLunch());
-
-        try {
-            db.beginTransaction();
-            db.insert("meals", null, mealValues);
-            db.setTransactionSuccessful();
-        } finally {
-            db.endTransaction();
-        }
-
-        Cursor cIdx = db.rawQuery("SELECT max(id) FROM meals;", new String[]{});
-        cIdx.moveToFirst();
-        int meal_id = cIdx.getInt(0);
-        meal.setId(meal_id);
-        String query = "INSERT INTO meals (name, breakfast, lunch, dinner) " +
-                "VALUES ('"+meal.getName()+"', '"+meal.getBreakfast()+"', '"+meal.getLunch()+"', '"+meal.getDinner()+"');";
-        db.execSQL(query);
-
-
-
-        for(Food x: meal.getIngredients()) {
-            query = "INSERT INTO recipes (meal_id, ingredient_id, amount) " +
-                    "VALUES ('"+ meal.getId() +"', '"+x.getId()+"', '"+x.getAmount()+"');";
-            db.execSQL(query);
-        }
-    }*/
 }

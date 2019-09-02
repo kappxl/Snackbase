@@ -23,7 +23,7 @@ public class FoodFragment extends Fragment implements IOnBackPressed {
         tabLayout = view.findViewById(R.id.tabLayout_id);
         viewPager = view.findViewById(R.id.viewPager_id);
         ViewPagerAdapter vpAdapter = new ViewPagerAdapter(getChildFragmentManager());
-        vpAdapter.AddFragment(new MealsFragment(), "meals");
+        vpAdapter.AddFragment(new MealListFragment(), "meals");
         vpAdapter.AddFragment(new FavsFragment(), "ingredients");
 
         viewPager.setAdapter(vpAdapter);

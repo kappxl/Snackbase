@@ -3,14 +3,17 @@ package de.kaikappel.snackbase;
 public class Ingredient {
     private int id;
     private String name;
-    private int cals;
+    private float cals;
     private float carbs;
     private float protein;
     private float fat;
-    private int grams;
+    private float grams;
     private float amount;
 
-    public Ingredient(int id, String name, int cals, float carbs, float protein, float fat, int grams, float amount) {
+    // If amount not known, use 1
+    //  - Special case when loading all ingredients
+    //    in an meal independent list
+    public Ingredient(int id, String name, float cals, float carbs, float protein, float fat, float grams, float amount) {
         this.id = id;
         this.name = name;
         this.cals = cals;
@@ -18,29 +21,28 @@ public class Ingredient {
         this.protein = protein;
         this.fat = fat;
         this.grams = grams;
-        this.amount = amount;
-    }
+        this.amount = grams / (float) 100 * amount;
 
-    public String getName() {
-        return name;
     }
 
     // GETTER OF ABSOLUTE CALCULATED VALUES
 
-    public int getCalsAbs() {
-        return (int)(((float) this.cals) / ((float) 100) * (this.amount * this.grams));
+    public String getName() {
+        return name;
+    }
+    public float getCalsAbs() {
+        return cals * amount;
     }
     public float getCarbsAbs() {
-        return (this.carbs / ((float) 100) * (this.amount * this.grams));
+        return carbs * amount;
     }
     public float getProteinAbs() {
-        return (this.protein / ((float) 100) * (this.amount * this.grams));
+        return protein * amount;
     }
     public float getFatAbs() {
-        return (this.fat / ((float) 100) * (this.amount * this.grams));
+        return fat * amount;
     }
-    public int getGramsAbs() {
-        return (int)(this.amount * this.grams);
+    public float getGramsAbs() {
+        return grams * amount;
     }
-
 }

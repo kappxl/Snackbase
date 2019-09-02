@@ -24,17 +24,16 @@ public class MealListAdapter extends ArrayAdapter<Meal> {
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        LayoutInflater inflater = LayoutInflater.from(this.context);
+        convertView = inflater.inflate(this.resource, parent, false);
 
+        // VARIABLES
 
         String name = getItem(position).getName();
-        int cals = getItem(position).getCals();
+        float cals = getItem(position).getCals();
         float carbs = getItem(position).getCarbs();
         float protein = getItem(position).getProtein();
         float fat = getItem(position).getFat();
-
-
-        LayoutInflater inflater = LayoutInflater.from(this.context);
-        convertView = inflater.inflate(this.resource, parent, false);
 
         TextView tvName = convertView.findViewById(R.id.mlv_name);
         TextView tvCals = convertView.findViewById(R.id.mlv_cals);
@@ -42,8 +41,10 @@ public class MealListAdapter extends ArrayAdapter<Meal> {
         TextView tvProtein = convertView.findViewById(R.id.mlv_protein);
         TextView tvFat = convertView.findViewById(R.id.mlv_fat);
 
+        // CREATE VIEW
+
         tvName.setText(name);
-        tvCals.setText(String.format("(%d kcals)", cals));
+        tvCals.setText(String.format("(%.1f kcals)", cals));
         tvCarbs.setText(String.format("%.1f", carbs));
         tvProtein.setText(String.format("%.1f", protein));
         tvFat.setText(String.format("%.1f", fat));

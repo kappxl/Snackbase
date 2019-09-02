@@ -16,46 +16,43 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Map;
 
-public class MealsFragment extends Fragment implements IOnBackPressed {
+public class IngredientListFragment extends Fragment implements IOnBackPressed {
 
     ListView listView;
-    ArrayList<Meal> mealList;
-    MealListAdapter adapter;
+    ArrayList<Ingredient> ingredientList;
+    IngredientListAdapter adapter;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragment_meals, container, false);
+        View view =  inflater.inflate(R.layout.fragment_ingredients, container, false);
         setHasOptionsMenu(true);
 
         // VARIABLES
 
-        listView = view.findViewById(R.id.mealListView);
+        listView = view.findViewById(R.id.ingredientListView);
 
         // CREATE VIEW
 
-        loadListView();
+        ingredientList = ((MainActivity) getActivity()).getIngredientList();
+
+        adapter = new IngredientListAdapter(getActivity().getApplicationContext(),
+                R.layout.food_list_layout, ingredientList);
+        listView.setAdapter(adapter);
 
         // LISTENER
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ((MainActivity) getActivity()).appendMeal(mealList.get(position).getId());
-                ((MainActivity) getActivity()).goHome();
+                ((MainActivity) getActivity()).addIngredientToMask(ingredientList.get(position));
+                ((MainActivity) getActivity()).goCreate();
             }
         });
 
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-
-                // Expand and show ingredients from Meal
-
-                return false;
-            }
-        });
+        // TODO: OnItemLongClickListener -> Show relative nutrition values
 
         return view;
     }
@@ -67,7 +64,7 @@ public class MealsFragment extends Fragment implements IOnBackPressed {
         MenuItem menuItem = menu.findItem(R.id.filterMenu);
         SearchView searchView = (SearchView) menuItem.getActionView();
 
-
+        // SEARCH VIEW (MENU)
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -78,14 +75,14 @@ public class MealsFragment extends Fragment implements IOnBackPressed {
             @Override
             public boolean onQueryTextChange(String newText) {
 
-                ArrayList<Meal> filteredFoods = new ArrayList<>();
+                ArrayList<Ingredient> filteredFoods = new ArrayList<>();
 
-                for(Meal x: mealList) {
+                for(Ingredient x: ingredientList) {
                     if (x.getName().toLowerCase().contains(newText.toLowerCase())) {
                         filteredFoods.add(x);
                     }
                 }
-                adapter = new MealListAdapter(getActivity().getApplicationContext(),
+                adapter = new IngredientListAdapter(getActivity().getApplicationContext(),
                         R.layout.food_list_layout, filteredFoods);
                 listView.setAdapter(adapter);
                 return false;
@@ -97,17 +94,7 @@ public class MealsFragment extends Fragment implements IOnBackPressed {
 
     @Override
     public boolean onBackPressed() {
-        ((MainActivity) getActivity()).goHome();
+        ((MainActivity) getActivity()).goCreate();
         return true;
-    }
-
-    // CREATE VIEW
-
-    public void loadListView() {
-        mealList = ((MainActivity) getActivity()).getFullMealList();
-
-        adapter = new MealListAdapter(getActivity().getApplicationContext(),
-                R.layout.food_list_layout, mealList);
-        listView.setAdapter(adapter);
     }
 }

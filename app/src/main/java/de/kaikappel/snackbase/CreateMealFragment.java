@@ -15,14 +15,11 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class CreateMealFragment extends Fragment implements IOnBackPressed {
 
     Button btSave, btAdd;
     ArrayList<Ingredient> ingredientList;
-    Meal meal;
     EditText etName;
     Switch b, l, d;
     ListView listView;
@@ -33,6 +30,8 @@ public class CreateMealFragment extends Fragment implements IOnBackPressed {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_meal, container, false);
 
+        // VARIABLES
+
         etName = view.findViewById(R.id.etNameCM);
         btSave = view.findViewById(R.id.btSaveCM);
         btAdd = view.findViewById(R.id.btAddMealCM);
@@ -41,11 +40,20 @@ public class CreateMealFragment extends Fragment implements IOnBackPressed {
         d = view.findViewById(R.id.swDinnerCM);
         listView = view.findViewById(R.id.lv_ingredientsCM);
 
+        // CREATE VIEW
+
         loadItems();
+
+        // LISTENER
 
         btAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ((MainActivity) getActivity()).getMaskCM().save(etName.getText().toString(),
+                        ingredientList,
+                        b.isChecked(),
+                        l.isChecked(),
+                        d.isChecked());
                 ((MainActivity) getActivity()).goIngredients();
             }
         });
@@ -67,22 +75,22 @@ public class CreateMealFragment extends Fragment implements IOnBackPressed {
                     Toast.makeText(getActivity().getApplicationContext(), "ingredients missing", Toast.LENGTH_SHORT).show();
                     return;
                 }
-/*                meal = new Meal(name,
-                        (b.isChecked() ? 1 : 0),
-                        (l.isChecked() ? 1 : 0),
-                        (d.isChecked() ? 1 : 0));
 
-                for (Food x: ingredientList) {
-                    meal.addIngredient(x, (float) 1.0);
-                }
+                ((MainActivity) getActivity()).getMaskCM().save(etName.getText().toString(),
+                        ingredientList,
+                        b.isChecked(),
+                        l.isChecked(),
+                        d.isChecked());
 
+/*
                 DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
                 databaseAccess.open();
                 databaseAccess.createMeal(meal);
                 databaseAccess.close();
 
                 ((MainActivity) getActivity()).loadAllMeals();
-                ((MainActivity) getActivity()).resetCreateMealList();*/
+                ((MainActivity) getActivity()).resetCreateMealList();
+*/
                 ((MainActivity) getActivity()).goHome();
             }
         });
@@ -90,7 +98,7 @@ public class CreateMealFragment extends Fragment implements IOnBackPressed {
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                ((MainActivity) getActivity()).popSelectedMealInCreateMeal(position);
+                // ((MainActivity) getActivity()).popSelectedMealInCreateMeal(position);
                 loadItems();
 
                 return false;
@@ -106,7 +114,19 @@ public class CreateMealFragment extends Fragment implements IOnBackPressed {
     }
 
     public void loadItems() {
-        ingredientList = ((MainActivity) getActivity()).getCreateMealIngredientList();
+
+        // GET MASK
+
+        MaskCreateMeal m = ((MainActivity) getActivity()).getMaskCM();
+
+        // CREATE VIEW
+
+        ingredientList = m.getIngredientList();
+        etName.setText(m.getName());
+        b.setChecked(m.getBreakfast());
+        l.setChecked(m.getLunch());
+        d.setChecked(m.getDinner());
+
         adapter = new IngredientListAdapter(getActivity().getApplicationContext(),
                 R.layout.food_list_layout, ingredientList);
         listView.setAdapter(adapter);

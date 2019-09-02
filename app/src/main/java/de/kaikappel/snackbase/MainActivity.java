@@ -147,6 +147,9 @@ public class MainActivity extends AppCompatActivity {
     public void addIngredientToMask(Ingredient ingredient) {
         maskCM.addIngredient(ingredient);
     }
+    public void popIngredientFromMask(int index) {
+        maskCM.popIngredient(index);
+    }
     public void resetMaskCreateMeal() {
         maskCM = new MaskCreateMeal();
     }

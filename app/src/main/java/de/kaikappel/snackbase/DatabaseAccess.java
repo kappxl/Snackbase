@@ -131,4 +131,10 @@ public class DatabaseAccess {
         getIngredients.close();
         return ingredientList;
     }
+
+    // INSERT INTO DATABASE
+
+    public void insertMeal(MaskCreateMeal meal) {
+        
+    }
 }

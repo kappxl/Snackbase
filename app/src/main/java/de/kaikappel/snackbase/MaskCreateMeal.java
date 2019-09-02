@@ -46,4 +46,7 @@ public class MaskCreateMeal {
     public void addIngredient(Ingredient i) {
         this.ingredientList.add(i);
     }
+    public void popIngredient(int index) {
+        ingredientList.remove(index);
+    }
 }

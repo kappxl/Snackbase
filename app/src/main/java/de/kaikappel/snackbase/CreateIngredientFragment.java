@@ -37,12 +37,19 @@ public class CreateIngredientFragment extends Fragment implements IOnBackPressed
             @Override
             public void onClick(View v) {
 
-                // VARIABLES
+                // VARIABLES // CHECKS
 
                 String name;
                 float cals, carbs, protein, fat, grams;
-
                 name = etName.getText().toString();
+
+                if(name.isEmpty()) { errorToast("name"); return; }
+                if(etCals.getText().toString().isEmpty()) { errorToast("cals"); return; }
+                if(etCarbs.getText().toString().isEmpty()) { errorToast("carbs"); return; }
+                if(etProtein.getText().toString().isEmpty()) { errorToast("protein"); return; }
+                if(etFat.getText().toString().isEmpty()) { errorToast("fat"); return; }
+                if(etGrams.getText().toString().isEmpty()) { errorToast("unit"); return; }
+
                 cals = Float.valueOf(etCals.getText().toString());
                 carbs = Float.valueOf(etCarbs.getText().toString());
                 protein = Float.valueOf(etProtein.getText().toString());
@@ -55,7 +62,7 @@ public class CreateIngredientFragment extends Fragment implements IOnBackPressed
                 databaseAccess.open();
 
                 if (!databaseAccess.insertIngredient(name, cals, carbs, protein, fat, grams)) {
-                    Toast.makeText(getActivity().getApplicationContext(), R.string.error_msg_default, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity().getApplicationContext(), getResources().getString(R.string.error_msg_default), Toast.LENGTH_LONG).show();
                 }
 
                 databaseAccess.close();
@@ -72,5 +79,9 @@ public class CreateIngredientFragment extends Fragment implements IOnBackPressed
     public boolean onBackPressed() {
         ((MainActivity) getActivity()).goHome();
         return true;
+    }
+
+    public void errorToast(String field) {
+        Toast.makeText(getActivity().getApplicationContext(), field + getResources().getString(R.string.error_is_empty), Toast.LENGTH_LONG).show();
     }
 }

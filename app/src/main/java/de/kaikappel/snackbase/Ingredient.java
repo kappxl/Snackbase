@@ -25,6 +25,10 @@ public class Ingredient {
 
     }
 
+    public int getId() {
+        return id;
+    }
+
     // GETTER OF ABSOLUTE CALCULATED VALUES
 
     public String getName() {

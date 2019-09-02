@@ -134,7 +134,50 @@ public class DatabaseAccess {
 
     // INSERT INTO DATABASE
 
-    public void insertMeal(MaskCreateMeal meal) {
-        
+    public boolean insertMeal(MaskCreateMeal meal) {
+
+        // DEBUGGING ONLY
+
+        // db.execSQL("DELETE FROM meals WHERE id > 13;");
+        // db.execSQL("DELETE FROM recipes WHERE meal_id > 13;");
+
+        // INSERT MEAL
+
+        String query = "INSERT INTO meals (name, breakfast, lunch, dinner) " +
+                "VALUES ('"+meal.getName()+"',"+
+                "'"+meal.getBreakfast()+"', " +
+                "'"+meal.getLunch()+"', " +
+                "'"+meal.getDinner()+"');";
+
+        db.execSQL(query);
+
+        // GET ID FROM INSERTED MEAL
+
+        Cursor cIdx = db.rawQuery("SELECT last_insert_rowid()", new String[]{});
+        int meal_id;
+
+        if(cIdx.moveToFirst()) {
+            meal_id = cIdx.getInt(0);
+            Log.d("Create Meal", "inserted meal id: " + meal_id);
+        } else {
+            Log.e("Create Meal", "no id found for inserted meal. can't insert ingredients.");
+            return false;
+        }
+
+        cIdx.close();
+
+        // ADD RECIPE FOR ALL INGREDIENTS OF INSERTED MEAL
+
+        String insertIngredient;
+        for(Ingredient i: meal.getIngredientList()) {
+            insertIngredient = "INSERT INTO recipes (meal_id, ingredient_id, amount) VALUES (" +
+                    "'" + meal_id + "', " +
+                    "'" + i.getId() + "', " +
+                    "'" + 1 + "')";
+
+            db.execSQL(insertIngredient);
+        }
+
+        return true;
     }
 }

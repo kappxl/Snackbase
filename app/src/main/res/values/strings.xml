@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Snackbase</string>
+    <string name="error_msg_default">ups, something went wrong..</string>
 </resources>

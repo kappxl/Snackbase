@@ -61,41 +61,6 @@ public class MealListFragment extends Fragment implements IOnBackPressed {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.filter_menu, menu);
-
-        MenuItem menuItem = menu.findItem(R.id.filterMenu);
-        SearchView searchView = (SearchView) menuItem.getActionView();
-
-        // SEARCH VIEW (MENU)
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-
-                ArrayList<Meal> filteredMeals = new ArrayList<>();
-
-                for(Meal x: mealList) {
-                    if (x.getName().toLowerCase().contains(newText.toLowerCase())) {
-                        filteredMeals.add(x);
-                    }
-                }
-                adapter = new MealListAdapter(getActivity().getApplicationContext(),
-                        R.layout.food_list_layout, filteredMeals);
-                listView.setAdapter(adapter);
-                return false;
-            }
-        });
-
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
     public boolean onBackPressed() {
         ((MainActivity) getActivity()).goHome();
         return true;

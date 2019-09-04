@@ -12,8 +12,11 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class HomeFragment extends Fragment {
 
@@ -22,6 +25,7 @@ public class HomeFragment extends Fragment {
     ListView listView;
     MealListAdapter adapter;
     Button btAddMeal;
+    long time = 0;
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
@@ -48,6 +52,21 @@ public class HomeFragment extends Fragment {
         refreshPage();
 
         // LISTENER
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                long tap = System.currentTimeMillis();
+                if (tap - time < 300) {
+                    ((MainActivity) getActivity()).goFoodList();
+                } else {
+                    // Show Ingredients
+                }
+
+                time = tap;
+
+            }
+        });
 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override

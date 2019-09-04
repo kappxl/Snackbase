@@ -11,9 +11,9 @@
         app:tabGravity="fill"
         app:tabMode="fixed"
         android:id="@+id/tabLayout_id"
-        app:tabTextColor="@color/colorAccent"
-        app:tabIndicatorColor="@color/colorAccent"
-        android:background="@color/colorMenuBackground"/>
+        app:tabTextColor="@color/homeText"
+        app:tabIndicatorColor="@color/homeText"
+        android:background="@drawable/bg_button_gradient"/>
 
     <android.support.v4.view.ViewPager
         android:layout_width="match_parent"

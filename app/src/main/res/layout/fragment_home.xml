@@ -9,7 +9,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/bgCreme"
+        android:background="@drawable/bg_button_gradient"
         android:gravity="center">
 
         <LinearLayout
@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:text="2115"
                 android:layout_centerHorizontal="true"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/homeText"
                 android:textSize="30sp"/>
             <TextView
                 android:id="@+id/tvCalsName"
@@ -53,7 +53,7 @@
                     android:layout_height="wrap_content"
                     android:text="204"
                     android:layout_centerHorizontal="true"
-                    android:textColor="@color/colorAccent"
+                    android:textColor="@color/homeText"
                     android:textSize="24sp"/>
                 <TextView
                     android:id="@+id/tvCarbsName"
@@ -75,7 +75,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="207"
-                    android:textColor="@color/colorAccent"
+                    android:textColor="@color/homeText"
                     android:textSize="24sp"/>
                 <TextView
                     android:id="@+id/tvProteinName"
@@ -95,7 +95,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="87"
-                    android:textColor="@color/colorAccent"
+                    android:textColor="@color/homeText"
                     android:textSize="24sp"/>
                 <TextView
                     android:id="@+id/tvFatName"
@@ -121,7 +121,10 @@
         <Button
             android:id="@+id/btAddMeal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
+            android:background="@drawable/bg_button_gradient"
+            android:textColor="@color/bgButtonText"
+            android:layout_margin="15dp"
             android:text="Add Meal"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="5dp"

@@ -20,5 +20,5 @@
         app:menu="@menu/main_menu"
         app:itemIconTint="@drawable/main_menu_icon_color"
         app:itemTextColor="@drawable/main_menu_icon_color"
-        android:background="@color/colorMenuBackground"/>
+        android:background="@drawable/bg_button_gradient"/>
 </RelativeLayout>

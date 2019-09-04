@@ -10,7 +10,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/line_1px"
+        android:background="@drawable/bg_button_gradient"
         android:gravity="center">
         <LinearLayout
             android:orientation="vertical"
@@ -27,7 +27,7 @@
                 android:maxLines="1"
                 android:maxLength="32"
                 android:gravity="center"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/homeText"
                 android:textSize="26sp"/>
             <TextView
                 android:layout_width="wrap_content"
@@ -200,7 +200,10 @@
         <Button
             android:id="@+id/btSaveCI"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
+            android:background="@drawable/bg_button_gradient"
+            android:textColor="@color/bgButtonText"
+            android:layout_margin="10dp"
             android:layout_weight="50"
             android:text="save" />
 

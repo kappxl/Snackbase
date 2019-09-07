@@ -12,8 +12,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.CompoundButton;
 import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.Switch;
 
 import java.util.ArrayList;
 
@@ -22,6 +23,7 @@ public class MealListFragment extends Fragment implements IOnBackPressed {
     ListView listView;
     ArrayList<Meal> mealList;
     MealListAdapter adapter;
+    private Switch b, l, d;
 
     @Nullable
     @Override
@@ -32,10 +34,14 @@ public class MealListFragment extends Fragment implements IOnBackPressed {
         // VARIABLES
 
         listView = view.findViewById(R.id.mealListView);
+        b = getActivity().findViewById(R.id.swBreakfastCM);
+        l = getActivity().findViewById(R.id.swLunchCM);
+        d = getActivity().findViewById(R.id.swDinnerCM);
 
         // CREATE VIEW
 
-        loadListView();
+        mealList = ((MainActivity) getActivity()).getFullMealList();
+        loadListView(mealList);
 
         // LISTENER
 
@@ -57,6 +63,27 @@ public class MealListFragment extends Fragment implements IOnBackPressed {
             }
         });
 
+        b.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                filterListView();
+            }
+        });
+
+        l.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                filterListView();
+            }
+        });
+
+        d.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                filterListView();
+            }
+        });
+
         return view;
     }
 
@@ -68,11 +95,20 @@ public class MealListFragment extends Fragment implements IOnBackPressed {
 
     // CREATE VIEW
 
-    public void loadListView() {
-        mealList = ((MainActivity) getActivity()).getFullMealList();
-
+    public void loadListView(ArrayList<Meal> mList) {
         adapter = new MealListAdapter(getActivity().getApplicationContext(),
-                R.layout.food_list_layout, mealList);
+                R.layout.food_list_layout, mList);
         listView.setAdapter(adapter);
+    }
+
+    public void filterListView() {
+        ArrayList<Meal> mealListFilter = new ArrayList<>();
+        for (Meal m: mealList) {
+            if((m.getBreakfast() && b.isChecked()) || (m.getLunch() && l.isChecked()) || (m.getDinner() && d.isChecked())) {
+                mealListFilter.add(m.copy());
+            }
+        }
+
+        loadListView(mealListFilter);
     }
 }

@@ -59,4 +59,21 @@ public class Meal {
     public String getName() {
         return this.name;
     }
+
+    public boolean getBreakfast() {
+        return (breakfast > 0 ? true : false);
+    }
+    public boolean getLunch() {
+        return (lunch > 0 ? true : false);
+    }
+    public boolean getDinner() {
+        return (dinner > 0 ? true : false);
+    }
+
+    public Meal copy() {
+        Meal m = new Meal(this.id, this.name, this.breakfast, this.lunch, this.dinner);
+        m.addAllIngredients(this.ingredients);
+        m.recalculateValues();
+        return m;
+    }
 }

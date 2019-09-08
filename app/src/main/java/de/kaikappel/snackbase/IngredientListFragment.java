@@ -47,6 +47,7 @@ public class IngredientListFragment extends Fragment implements IOnBackPressed {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // TODO: Get amount.
                 ((MainActivity) getActivity()).addIngredientToMask(ingredientList.get(position));
                 ((MainActivity) getActivity()).goCreate();
             }

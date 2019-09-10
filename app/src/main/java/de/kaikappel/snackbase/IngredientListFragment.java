@@ -4,25 +4,19 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.ExpandableListView;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 public class IngredientListFragment extends Fragment implements IOnBackPressed {
 
-    ListView listView;
-    ArrayList<Ingredient> ingredientList;
-    IngredientListAdapter adapter;
+    private ExpandableListView expandableListView;
+    private ArrayList<Ingredient> ingredientList;
+    private IngredientAddAdapter adapter;
+    private int lastPosition = -1;
 
     @Nullable
     @Override
@@ -32,26 +26,37 @@ public class IngredientListFragment extends Fragment implements IOnBackPressed {
 
         // VARIABLES
 
-        listView = view.findViewById(R.id.ingredientListView);
+        expandableListView = view.findViewById(R.id.ingredientListView);
 
         // CREATE VIEW
 
         ingredientList = ((MainActivity) getActivity()).getIngredientList();
 
-        adapter = new IngredientListAdapter(getActivity().getApplicationContext(),
-                R.layout.food_list_layout, ingredientList);
-        listView.setAdapter(adapter);
+        adapter = new IngredientAddAdapter(getActivity(), ingredientList);
+        expandableListView.setAdapter(adapter);
+
+        expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                if (lastPosition != -1
+                        && groupPosition != lastPosition) {
+                    expandableListView.collapseGroup(lastPosition);
+                }
+                lastPosition = groupPosition;
+            }
+        });
 
         // LISTENER
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+/*        expandableListViewistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // TODO: Get amount.
                 ((MainActivity) getActivity()).addIngredientToMask(ingredientList.get(position));
                 ((MainActivity) getActivity()).goCreate();
             }
-        });
+        });*/
 
         // TODO: OnItemLongClickListener -> Show relative nutrition values
 

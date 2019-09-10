@@ -145,6 +145,25 @@ public class MainActivity extends AppCompatActivity {
 
     public MaskCreateMeal getMaskCM() { return maskCM; }
     public void addIngredientToMask(Ingredient ingredient) {
+        for(Ingredient i: maskCM.getIngredientList()) {
+            if (i.getName() == ingredient.getName()) {
+                if (i.getGrams() == ingredient.getGrams()) {
+                    i.setAmount(i.getAmount() + ingredient.getAmount());
+                    return;
+                } else {
+                    float amount_new = ingredient.getAmount();
+                    float grams_new = ingredient.getGrams();
+                    float amount_old = i.getAmount();
+                    float grams_old = i.getGrams();
+
+                    i.setGrams((amount_new*grams_new) + (amount_old * grams_old));
+                    i.setAmount(1);
+                    return;
+                }
+
+            }
+        }
+        // else:
         maskCM.addIngredient(ingredient);
     }
     public void popIngredientFromMask(int index) {

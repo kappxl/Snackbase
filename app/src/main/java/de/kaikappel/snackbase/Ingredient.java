@@ -9,6 +9,8 @@ public class Ingredient {
     private float fat;
     private float grams;
     private float amount;
+    private float amountAbs;
+    private boolean edited;
 
     // If amount not known, use 1
     //  - Special case when loading all ingredients
@@ -21,8 +23,9 @@ public class Ingredient {
         this.protein = protein;
         this.fat = fat;
         this.grams = grams;
+        this.amountAbs = amount;
         this.amount = grams / (float) 100 * amount;
-
+        this.edited = false;
     }
 
     public int getId() {
@@ -48,5 +51,40 @@ public class Ingredient {
     }
     public float getGramsAbs() {
         return grams * amount;
+    }
+
+    public float getCals() {
+        return cals;
+    }
+    public float getCarbs() {
+        return carbs;
+    }
+    public float getProtein() {
+        return protein;
+    }
+    public float getFat() {
+        return fat;
+    }
+    public float getGrams() {
+        return grams;
+    }
+    public float getAmount() {
+        return amountAbs;
+    }
+    public boolean isEdited() {
+        return edited;
+    }
+
+    // SETTER
+
+    public void setGrams(float grams) {
+        this.grams = grams;
+    }
+    public void setAmount(float amount) {
+        this.amountAbs = amount;
+        this.amount = grams / (float) 100 * amount;
+    }
+    public void setEdited(boolean edited) {
+        this.edited = edited;
     }
 }

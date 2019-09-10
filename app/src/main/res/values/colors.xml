@@ -17,4 +17,6 @@
     <color name="bgButtonText">#e2e2e2</color>
     <color name="homeText">#e2e2e2</color>
 
+    <color name="lv_color_alt">#EFF4F7</color>
+
 </resources>

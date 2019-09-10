@@ -173,7 +173,7 @@ public class DatabaseAccess {
             insertIngredient = "INSERT INTO recipes (meal_id, ingredient_id, amount) VALUES (" +
                     "'" + meal_id + "', " +
                     "'" + i.getId() + "', " +
-                    "'" + 1 + "')";
+                    "'" + i.getAmount() + "')";
 
             db.execSQL(insertIngredient);
         }

@@ -44,7 +44,7 @@ public class HomeFragment extends Fragment {
         carbs = view.findViewById(R.id.tvCarbs);
         protein = view.findViewById(R.id.tvProtein);
         fat = view.findViewById(R.id.tvFat);
-        listView = view.findViewById(R.id.listView);
+        listView = view.findViewById(R.id.home_listView);
         btAddMeal = view.findViewById(R.id.btAddMeal);
 
         // CREATE VIEW
